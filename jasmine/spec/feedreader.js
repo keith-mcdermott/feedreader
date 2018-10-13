@@ -37,7 +37,6 @@ $(function() {
             };
          });
 
-
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
@@ -93,10 +92,13 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+
+        // This test loads a feed and verifies that text is present.
+        // "beforeEach" approach for this and the next test developed with reference to Matthew Cranford at https://matthewcranford.com/feed-reader-walkthrough-part-4-async-tests/ and Stack Overflow at https://stackoverflow.com
+
         beforeEach(function(done){
             loadFeed(0, done);
         });
-
 
         it('should load a new feed', function(){
            const feed = document.querySelector('.feed');
@@ -113,29 +115,22 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+
+        //This test compares the text of two feeds and evaluates whether they are the same. Identical text would suggest that a new feed did not load properly. The first feed is stored in variable firstFeed.
+        
         const feed = document.querySelector('.feed');
-        const firstFeed = [];
+        let firstFeed;
         
         beforeEach(function(done){
     
             loadFeed(0, function(){
-
-                Array.from(feed.children).forEach(function(entry){
-                firstFeed.push(entry.innerText);  
-                });
+                firstFeed=feed.innerText;
             });
-            
             loadFeed(1, done);
         });
 
         it('should change content', function(){
-            Array.from(feed.children).forEach(function(entry, index){
-                console.log(entry.innerText, firstFeed[index], entry.innerText===firstFeed[index])
-                expect(entry.innerText === firstFeed[index]).not.toBe(true);
-            // // console.log(feed.innerText)
-        
-            });
+            expect(feed.innerText === firstFeed).not.toBe(true);
         });        
     });   
-
 }());
